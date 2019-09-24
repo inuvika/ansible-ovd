@@ -51,6 +51,11 @@
       name: "{{ ovd_as_packages }}"
       state: latest
 
+  - name: Install OVD Linux Application Server debug package
+    apt:
+      name: inuvika-ovd-externalapps-client-dbg
+      state: latest
+
   - name: Uninstall xscreensaver
     apt:
       name: 
