@@ -21,18 +21,26 @@
       - ansible_distribution_major_version != '8' or ovd_version is version('3.3.0', '>=')
     msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported by OVD {{ ovd_version }}"
 
-- name: Enable the Optional Repository Channel
-  when:
-   - ansible_distribution in ['RedHat', 'Red Hat Enterprise Linux']
-   - ansible_distribution_major_version == '7'
+- name: Register RedHat online repositories
+  when: ansible_distribution in ['RedHat', 'Red Hat Enterprise Linux']
   block:
     - name: Check rhel subscription status
       command: subscription-manager list
       register: rhel_subs
 
-    - name: Enable the Optional Repository Channel if subscribed
-      when: "'Subscribed' in rhel_subs.stdout"
-      command: subscription-manager repos --enable=rhel-7-server-optional-rpms
+    - when: "'Subscribed' in rhel_subs.stdout"
+      block:
+      # https://docs.fedoraproject.org/en-US/epel/
+      - name: Enable required RHEL 8 repositories
+        when: ansible_distribution_major_version == '8'
+        rhsm_repository:
+          name:
+            - codeready-builder-for-rhel-8-x86_64-rpms # For EPEL
+            - openstack-15-tools-for-rhel-8-x86_64-rpms # For ovd-esg: python3-crypto
+
+      - name: Enable required RHEL 7 repository (Optional Repository Channel) # For EPEL
+        when: ansible_distribution_major_version == '7'
+        command: subscription-manager repos --enable=rhel-7-server-optional-rpms
 
 - name: Install the EPEL repository
   block:
