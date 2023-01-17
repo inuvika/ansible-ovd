@@ -18,3 +18,8 @@ fpm_service_name: php-fpm
 apache_service_name: httpd
 apache_user_name: apache
 apache_group_name: apache
+
+mysql_service_name: mariadb
+mysql_packages:
+  - mariadb
+  - mariadb-server
