@@ -51,10 +51,6 @@
 - name: "SELinux : Configuration"
   when: ansible_selinux.status != "disabled"
   block:
-    - name: "SELinux : Configuration tools installation"
-      yum:
-        name: policycoreutils-python
-
     - name: "SELinux : Configuration : Allow Apache to listen on tcp ports 1111 and 1112"
       seport:
         ports: 1111,1112

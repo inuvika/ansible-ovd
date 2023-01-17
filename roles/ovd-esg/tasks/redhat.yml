@@ -24,10 +24,6 @@
 - name: "SELinux : Configuration"
   when: ansible_selinux.status != "disabled"
   block:
-    - name: "SELinux : Configuration tools installation"
-      yum:
-        name: policycoreutils-python
-
     - name: "SELinux : Deploy policy"
       block:
       - name: "SELinux : Deploy policy : Copy policy to host"

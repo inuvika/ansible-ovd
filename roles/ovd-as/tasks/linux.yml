@@ -66,10 +66,6 @@
     - ansible_os_family == 'RedHat'
     - ansible_selinux.status != "disabled"
   block:
-    - name: "SELinux : Configuration tools installation"
-      yum:
-        name: policycoreutils-python
-
     - name: "SELinux : Change context of dir /var/spool/xrdp_printer"
       sefcontext:
         target: "/var/spool/xrdp_printer(/.*)"
