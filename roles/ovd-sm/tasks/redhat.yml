@@ -74,6 +74,12 @@
         state: yes
         persistent: yes
 
+    - name: "SELinux : Configuration : Set boolean to allow php-fpm to execmem"
+      seboolean:
+        name: httpd_execmem
+        state: yes
+        persistent: yes
+
     - name: "SELinux : Configuration : Change context of files in /var/spool/ovd"
       sefcontext:
         target: "/var/spool/ovd(/.*)?"
