@@ -44,7 +44,7 @@
       block:
       - name: "SELinux : Deploy policy : Copy policy to host"
         copy:
-          src: ovd_fs.te
+          src: "ovd_fs{{ ansible_distribution_major_version }}.te"
           dest: /tmp/ovd_fs.te
 
       - name: "SELinux : Deploy policy : Create type file"
