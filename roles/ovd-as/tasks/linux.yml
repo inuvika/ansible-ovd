@@ -111,6 +111,18 @@
       - cups
       - smb
 
+  - name: Install lxcfs on rhel8 to enable process isolation
+    when: ansible_distribution_major_version == '8'
+    block:
+      - yum:
+          name: lxcfs
+          state: present
+
+      - service:
+          name: lxcfs
+          state: started
+          enabled: yes
+
   - name: Install OVD Linux Application Server
     yum:
       name: "{{ ovd_as_packages }}"
