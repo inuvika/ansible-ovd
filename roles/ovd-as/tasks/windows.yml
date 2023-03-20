@@ -53,7 +53,6 @@
     name: NFS-Client
     state: present
   register: install_nfs
-  notify: "Reboot if requested by win_feature"
 
 - name: Install Remote-Assistance
   when: ovd_install_msra is defined and ovd_install_msra|bool==true
@@ -61,7 +60,6 @@
     name: Remote-Assistance
     state: present
   register: install_msra
-  notify: "Reboot if requested by win_feature"
 
 - name: Install RDS
   win_feature:
@@ -71,7 +69,10 @@
     include_sub_features: yes
     include_management_tools: yes
   register: install_rds
-  notify: "Reboot if requested by win_feature"
+
+- name: Reboot if requested by win_feature
+  win_reboot:
+  when: install_rds.reboot_required|default(False) or install_nfs.reboot_required|default(False) or install_msra.reboot_required|default(False)
 
 - name: Configure RDS
   win_shell: |
