@@ -19,7 +19,3 @@
     name: OVD
     state: restarted
   tags: [ovd, ovd-as]
-
-- name: Reboot if requested by win_feature
-  win_reboot:
-  when: install_rds.reboot_required|default(False) or install_nfs.reboot_required|default(False) or install_msra.reboot_required|default(False)

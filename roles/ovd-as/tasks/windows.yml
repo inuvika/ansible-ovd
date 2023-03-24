@@ -47,6 +47,20 @@
   delay: 10
   changed_when: False
 
+- name: Install NFS Client
+  when: ovd_install_nfs is defined and ovd_install_nfs|bool==true
+  win_feature:
+    name: NFS-Client
+    state: present
+  register: install_nfs
+
+- name: Install Remote-Assistance
+  when: ovd_install_msra is defined and ovd_install_msra|bool==true
+  win_feature:
+    name: Remote-Assistance
+    state: present
+  register: install_msra
+
 - name: Install RDS
   win_feature:
     name: "RDS-RD-Server"
@@ -55,7 +69,10 @@
     include_sub_features: yes
     include_management_tools: yes
   register: install_rds
-  notify: "Reboot if requested by win_feature"
+
+- name: Reboot if requested by win_feature
+  win_reboot:
+  when: install_rds.reboot_required|default(False) or install_nfs.reboot_required|default(False) or install_msra.reboot_required|default(False)
 
 - name: Configure RDS
   win_shell: |
@@ -247,14 +264,6 @@
         rights: ExecuteFile
         state: present
 
-- name: Install NFS Client
-  when: ovd_install_nfs is defined and ovd_install_nfs|bool==true
-  win_feature:
-    name: NFS-Client
-    state: present
-  register: install_nfs
-  notify: "Reboot if requested by win_feature"
-
 - name: Install Inuvika WebDAV driver
   when: ovd_install_webdav is defined and ovd_install_webdav|bool==true
   block:
@@ -292,11 +301,3 @@
         arguments: "/S"
         product_id: "Inuvika OVD WebDAV driver"
         state: present
-
-- name: Install Remote-Assistance
-  when: ovd_install_msra is defined and ovd_install_msra|bool==true
-  win_feature:
-    name: Remote-Assistance
-    state: present
-  register: install_msra
-  notify: "Reboot if requested by win_feature"
