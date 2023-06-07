@@ -55,6 +55,9 @@
 - when: ovd_wa_www_config == 'tomcat'
   set_fact: ovd_wa_packages="{{ ovd_wa_packages + [ tomcat_service_name ] }}"
 
+- when: ovd_version is version('3.3.0.2', '>=')
+  set_fact: ovd_wa_packages="{{ ovd_wa_packages + [ 'inuvika-ovd-slaveserver-role-webaccess', 'inuvika-ovd-slaveserver' ] }}"
+
 - include_tasks: debian.yml
   when: ansible_os_family == "Debian"
   tags: [ovd, ovd-wa]
@@ -113,3 +116,35 @@
     enabled: yes
   ignore_errors: true
   tags: [ovd, ovd-wa]
+
+
+- name: Register debconf values >= 3.3.0.2.
+  when: ovd_version is version('3.3.0.2', '>=')
+  block:
+      # Use inheritage when 3.2 will be EOL
+    - name: Configure OVD Slaveserver
+      ini_file:
+        path: /etc/ovd/slaveserver/slaveserver.conf
+        section: '{{ item.section }}'
+        option: '{{ item.option }}'
+        value: '{{ lookup("vars", item.value, default="") }}'
+        state: '{{ "absent" if lookup("vars", item.value, default="") == "" else "present" }}'
+        mode: 0644
+      loop:
+        - { section: main, option: session_manager, value: ovd_session_manager }
+        - { section: main, option: stop_timeout, value: ovd_slaveserver_stop_timeout }
+        - { section: log, option: level, value: ovd_slaveserver_log_levels }
+        - { section: log, option: file, value: ovd_slaveserver_log_file }
+        - { section: log, option: thread, value: ovd_slaveserver_log_thread }
+
+    - name: Restart Slaveserver
+      service:
+        name: ovd-slaveserver
+        state: restarted
+      tags: [ovd, ovd-wa]
+
+    - name: Ensure OVD Slaveserver is started
+      service:
+        name: ovd-slaveserver
+        state: started
+        enabled: yes

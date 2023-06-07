@@ -29,6 +29,30 @@
         state: yes
         persistent: yes
 
+    - name: "SELinux : Configuration 3.3"
+      when: ovd_version is version('3.3.0.2', '>=')
+      block:
+        - name: "SELinux : Configuration 3.3 : Change context of /var/spool/ovd/html5/sessions"
+          sefcontext:
+            target: "/var/spool/ovd(/.*)?"
+            setype: httpd_sys_rw_content_t
+
+        - name: "SELinux : Configuration 3.3 : Deploy policy"
+          block:
+          - name: "SELinux : Configuration 3.3 : Copy policy to host"
+            copy:
+              src: ovd_webaccess.te
+              dest: /tmp/ovd_webaccess.te
+
+          - name: "SELinux : Configuration 3.3 : Create type file"
+            command: checkmodule -M -m -o /tmp/ovd_webaccess.mod /tmp/ovd_webaccess.te
+
+          - name: "SELinux : Configuration 3.3 : Package policy"
+            command: semodule_package -o /tmp/ovd_webaccess.pp -m /tmp/ovd_webaccess.mod
+
+          - name: "SELinux : Configuration 3.3 : Install policy"
+            command: semodule -i /tmp/ovd_webaccess.pp
+
 - name: Install OVD Web Access
   yum:
     name: "{{ ovd_wa_packages }}"
