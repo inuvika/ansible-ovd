@@ -16,10 +16,18 @@
 ---
 - name: "SELinux : Set boolean"
   when: ansible_selinux.status != "disabled"
-  seboolean:
-    name: httpd_can_network_connect
-    state: yes
-    persistent: yes
+  block:
+    - name: "SELinux : Configuration : Set boolean to allow php-fpm to execmem"
+      seboolean:
+        name: httpd_execmem
+        state: yes
+        persistent: yes
+
+    - name: "SELinux : Configuration : Allow Apache to tcp connect"
+      seboolean:
+        name: httpd_can_network_connect
+        state: yes
+        persistent: yes
 
 - name: Install OVD Web Access
   yum:

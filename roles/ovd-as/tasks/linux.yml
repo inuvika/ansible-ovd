@@ -66,10 +66,6 @@
     - ansible_os_family == 'RedHat'
     - ansible_selinux.status != "disabled"
   block:
-    - name: "SELinux : Configuration tools installation"
-      yum:
-        name: policycoreutils-python
-
     - name: "SELinux : Change context of dir /var/spool/xrdp_printer"
       sefcontext:
         target: "/var/spool/xrdp_printer(/.*)"
@@ -96,7 +92,7 @@
   block:
   - name: Install Ansible Dependencies
     yum:
-      name: libselinux-python
+      name: "{{ 'libselinux-python' if ansible_distribution_major_version == '7' else 'python3-libselinux' }}"
       state: present
   
   - name: Install Cups and Samba
@@ -114,6 +110,18 @@
     loop:
       - cups
       - smb
+
+  - name: Install lxcfs on rhel8 to enable process isolation
+    when: ansible_distribution_major_version == '8'
+    block:
+      - yum:
+          name: lxcfs
+          state: present
+
+      - service:
+          name: lxcfs
+          state: started
+          enabled: yes
 
   - name: Install OVD Linux Application Server
     yum:

@@ -16,8 +16,7 @@
 ---
 - name: Install Python modules
   yum:
-    name:
-    - MySQL-python
+    name: "{{ 'MySQL-python' if ansible_distribution_major_version == '7' else 'python3-PyMySQL' }}"
     state: present
 
 - name: Install MySQL
@@ -51,10 +50,6 @@
 - name: "SELinux : Configuration"
   when: ansible_selinux.status != "disabled"
   block:
-    - name: "SELinux : Configuration tools installation"
-      yum:
-        name: policycoreutils-python
-
     - name: "SELinux : Configuration : Allow Apache to listen on tcp ports 1111 and 1112"
       seport:
         ports: 1111,1112
@@ -76,6 +71,12 @@
     - name: "SELinux : Configuration : Set boolean to allow password change"
       seboolean:
         name: nis_enabled
+        state: yes
+        persistent: yes
+
+    - name: "SELinux : Configuration : Set boolean to allow php-fpm to execmem"
+      seboolean:
+        name: httpd_execmem
         state: yes
         persistent: yes
 

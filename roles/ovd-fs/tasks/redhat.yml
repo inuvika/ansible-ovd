@@ -17,10 +17,6 @@
 - name: "SELinux : Configuration"
   when: ansible_selinux.status != "disabled"
   block:
-    - name: "SELinux : Configuration tools installation"
-      yum:
-        name: policycoreutils-python
-
     - name: "SELinux : Configuration : Set boolean for httpd"
       seboolean:
         name: httpd_use_fusefs
@@ -48,7 +44,7 @@
       block:
       - name: "SELinux : Deploy policy : Copy policy to host"
         copy:
-          src: ovd_fs.te
+          src: "ovd_fs{{ ansible_distribution_major_version }}.te"
           dest: /tmp/ovd_fs.te
 
       - name: "SELinux : Deploy policy : Create type file"
