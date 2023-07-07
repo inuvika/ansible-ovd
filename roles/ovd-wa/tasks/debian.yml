@@ -15,8 +15,8 @@
 # limitations under the License.
 ---
 
-- name: Register debconf values < 3.3.0.2.
-  when: ovd_version is version('3.3.0.2', '<')
+- name: Register debconf values < 3.3.
+  when: ovd_version is version('3.3', '<')
   block:
     - name: "Register debconf values : link_session_manager"
       debconf:
@@ -39,8 +39,8 @@
         value: "true"
         vtype: boolean
 
-- name: Register debconf values >= 3.3.0.2.
-  when: ovd_version is version('3.3.0.2', '>=')
+- name: Register debconf values >= 3.3.
+  when: ovd_version is version('3.3', '>=')
   block:
     - name: "Register debconf values : link_session_manager"
       debconf:

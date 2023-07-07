@@ -55,7 +55,7 @@
 - when: ovd_wa_www_config == 'tomcat'
   set_fact: ovd_wa_packages="{{ ovd_wa_packages + [ tomcat_service_name ] }}"
 
-- when: ovd_version is version('3.3.0.2', '>=')
+- when: ovd_version is version('3.3', '>=')
   set_fact: ovd_wa_packages="{{ ovd_wa_packages + [ 'inuvika-ovd-slaveserver-role-webaccess', 'inuvika-ovd-slaveserver' ] }}"
 
 - include_tasks: debian.yml
@@ -118,8 +118,8 @@
   tags: [ovd, ovd-wa]
 
 
-- name: Register debconf values >= 3.3.0.2.
-  when: ovd_version is version('3.3.0.2', '>=')
+- name: Register debconf values >= 3.3.
+  when: ovd_version is version('3.3', '>=')
   block:
       # Use inheritage when 3.2 will be EOL
     - name: Configure OVD Slaveserver
