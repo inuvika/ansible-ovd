@@ -30,7 +30,7 @@
         persistent: yes
 
     - name: "SELinux : Configuration 3.3"
-      when: ovd_version is version('3.3.0.2', '>=')
+      when: ovd_version is version('3.3', '>=')
       block:
         - name: "SELinux : Configuration 3.3 : Change context of /var/spool/ovd/html5/sessions"
           sefcontext:
