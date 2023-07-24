@@ -30,6 +30,12 @@
         state: yes
         persistent: yes
 
+    - name: "SELinux : Configuration : Allow Apache to tcp connect"
+      seboolean:
+        name: httpd_can_network_connect
+        state: yes
+        persistent: yes
+
     - name: "SELinux : Configuration : Change context of files in /var/spool/ovd"
       sefcontext:
         target: "/var/spool/ovd(/.*)?"
