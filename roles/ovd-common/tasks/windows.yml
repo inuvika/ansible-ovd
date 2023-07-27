@@ -18,5 +18,4 @@
   assert:
     that:
       - ansible_os_name|regex_search("Server (2022|2019|2016|2012 R2)")
-      - not ansible_os_name|regex_search("Server 2022") or ovd_version is version('3.1', '>=')
     msg: "{{ ansible_os_name }} is not supported by OVD"

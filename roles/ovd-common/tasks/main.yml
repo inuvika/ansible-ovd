@@ -45,17 +45,6 @@
       - ovd_www_config in ('apache-mod', 'apache-fpm')
     msg: ovd_www_config settings does not support value "{{ ovd_www_config }}"
 
-- name: Set the default OVD Administration API method
-  when: ovd_sm_admin_api is not defined
-  set_fact:
-    ovd_sm_admin_api: "{{ 'soap' if ovd_version is version('3.0.99', '<') else 'rest' }}"
-
-- name: Check the "ovd_sm_admin_api" setting value
-  assert:
-    that:
-      - ovd_sm_admin_api in ('rest', 'soap')
-    msg: ovd_sm_admin_api settings does not support value "{{ ovd_sm_admin_api }}"
-
 - include_tasks: debian.yml
   when: ansible_os_family == 'Debian'
   tags: [ovd]

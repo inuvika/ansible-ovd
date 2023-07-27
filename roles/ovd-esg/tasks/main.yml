@@ -61,8 +61,7 @@
     - { option: process_timeout, value: ovd_esg_process_timeout }
     - { option: connection_timeout, value: ovd_esg_connection_timeout }
     - { option: http_max_header_size, value: ovd_esg_http_max_header_size }
-    - { option: admin_redirection, value: '{{ "ovd_esg_admin_redirection" if ovd_version is version("2.9", "<") else "" }}' }
-    - { option: admin_host, value: '{{ "ovd_esg_admin_host" if ovd_version is version("2.9", ">=") else "" }}' }
+    - { option: admin_host, value: ovd_esg_admin_host }
     - { option: root_redirection, value: ovd_esg_root_redirection }
     - { option: certificate_path, value: '{{ "ovd_esg_certificate_path" if ovd_version is version("3.1.90", ">=") else "" }}' }
     - { option: http_keep_alive, value: ovd_esg_http_keep_alive }

@@ -16,7 +16,6 @@
 ---
 - name: Configure Session Manager Database
   sm_api:
-    api: "{{ ovd_sm_admin_api | default('soap') }}"
     user: "{{ ovd_sm_admin_login }}"
     password: "{{ ovd_sm_admin_password }}"
     settings:
@@ -40,7 +39,6 @@
 
 - name: Install the subscription key on the server
   sm_api:
-    api: "{{ ovd_sm_admin_api }}"
     user: "{{ ovd_sm_admin_login }}"
     password: "{{ ovd_sm_admin_password }}"
     subscription_key: "{{ lookup('file', ovd_sm_subscription_key) | b64encode }}"
@@ -49,7 +47,6 @@
 
 - name: Switch new server to production
   sm_api:
-    api: "{{ ovd_sm_admin_api }}"
     user: "{{ ovd_sm_admin_login }}"
     password: "{{ ovd_sm_admin_password }}"
     settings:
@@ -59,7 +56,6 @@
 
 - name: Register new server
   sm_api:
-    api: "{{ ovd_sm_admin_api }}"
     user: "{{ ovd_sm_admin_login }}"
     password: "{{ ovd_sm_admin_password }}"
     settings:
@@ -69,7 +65,6 @@
 
 - name: Switch Session Manager to production
   sm_api:
-    api: "{{ ovd_sm_admin_api }}"
     user: "{{ ovd_sm_admin_login }}"
     password: "{{ ovd_sm_admin_password }}"
     settings:
