@@ -1,0 +1,48 @@
+# Copyright (C) 2024 Inuvika Inc.
+# https://www.inuvika.com
+# Author David Lechevalier <d.lechevalier@inuvika.com> 2024
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+---
+- name: "SELinux : Configuration"
+  when: ansible_selinux.status != "disabled"
+  block:
+    - name: "SELinux : Configuration : Allow Apache to listen on tcp port 1113"
+      seport:
+        ports: 1114
+        proto: tcp
+        setype: http_port_t
+
+    - name: "SELinux : Deploy policy"
+      block:
+      - name: "SELinux : Deploy policy : Copy policy to host"
+        copy:
+          src: ovd_hy.te
+          dest: /tmp/ovd_hy.te
+
+      - name: "SELinux : Deploy policy : Create type file"
+        command: checkmodule -M -m -o /tmp/ovd_hy.mod /tmp/ovd_hy.te
+
+      - name: "SELinux : Deploy policy : Package policy"
+        command: semodule_package -o /tmp/ovd_hy.pp -m /tmp/ovd_hy.mod
+
+      - name: "SELinux : Deploy policy : Install policy"
+        command: semodule -i /tmp/ovd_hy.pp
+
+- name: Install OVD Provisioning Server
+  yum:
+    name:
+    - inuvika-ovd-slaveserver-role-hy
+    state: latest
+  notify:
+    - Restart Slaveserver

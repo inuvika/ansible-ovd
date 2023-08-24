@@ -1,0 +1,11 @@
+module ovd_hy 1.0;
+
+require {
+        type logwatch_mail_t;
+        type logwatch_cache_t;
+        class dir { add_name write };
+        class file { append create getattr open };
+}
+
+allow logwatch_mail_t logwatch_cache_t:dir { add_name write };
+allow logwatch_mail_t logwatch_cache_t:file { append create getattr open };
