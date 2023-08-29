@@ -19,6 +19,7 @@
     that:
       - ansible_distribution_release in ('xenial', 'bionic', 'jammy')
       - ansible_distribution_release != 'xenial' or ovd_version is version('3.1.99', '<=')
+      - ansible_distribution_release != 'bionic' or ovd_version is version('3.3.99', '<=')
     msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported by OVD {{ ovd_version }}"
 
 - name: Update APT cache
