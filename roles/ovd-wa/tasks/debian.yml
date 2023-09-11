@@ -15,7 +15,8 @@
 # limitations under the License.
 ---
 
-- name: Register debconf values
+- name: Register debconf values < 3.3.
+  when: ovd_version is version('3.3', '<')
   block:
     - name: "Register debconf values : link_session_manager"
       debconf:
@@ -37,6 +38,16 @@
         question: inuvika-ovd-web-access/activate_ssl
         value: "true"
         vtype: boolean
+
+- name: Register debconf values >= 3.3.
+  when: ovd_version is version('3.3', '>=')
+  block:
+    - name: "Register debconf values : link_session_manager"
+      debconf:
+        name: inuvika-ovd-slaveserver
+        question: inuvika-ovd-slaveserver/session_manager
+        value: "{{ ovd_session_manager }}"
+        vtype: string
 
 - name: Install OVD Web Access
   apt:

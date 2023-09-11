@@ -1,0 +1,17 @@
+module ovd_webaccess 1.0;
+
+require {
+        type tomcat_t;
+        type var_spool_t;
+        type httpd_sys_rw_content_t;
+        class dir { add_name getattr remove_name search write };
+        class file { create getattr open read unlink write };
+}
+
+#============= tomcat_t ==============
+
+allow tomcat_t var_spool_t:dir { add_name getattr remove_name search write };
+allow tomcat_t var_spool_t:file { create getattr open read write unlink };
+
+allow tomcat_t httpd_sys_rw_content_t:dir { add_name getattr remove_name search write };
+allow tomcat_t httpd_sys_rw_content_t:file { create getattr open read write unlink };
