@@ -19,6 +19,7 @@
     that:
       - ansible_distribution_major_version in ['7', '8']
       - ansible_distribution_major_version != '8' or ovd_version is version('3.3.0', '>=')
+      - ansible_distribution_major_version != '7' or ovd_version is version('3.3.99', '<=')
     msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported by OVD {{ ovd_version }}"
 
 - name: Register RedHat online repositories

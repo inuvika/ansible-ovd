@@ -18,10 +18,10 @@ host or a set of hosts for production use. The hosts in question can be physical
 
 The roles support the following servers:
 
-* CentOS 7.x 64 bits
-* Red Hat Enterprise Linux 7.x 64 bits
+* CentOS 7.x 64 bits  (available for OVD <= 3.3)
+* Red Hat Enterprise Linux 7.x 64 bits  (available for OVD <= 3.3)
 * Ubuntu 22.04 LTS server (Jammy Jellyfish) 64 bits  (available for OVD >= 3.2.1)
-* Ubuntu 18.04 LTS server (Bionic Beaver) 64 bits
+* Ubuntu 18.04 LTS server (Bionic Beaver) 64 bits  (available for OVD <= 3.3)
 * Ubuntu 16.04 LTS server (Xenial Xerus) 64 bits  (available for OVD <= 3.1)
 * Windows Server 2022
 * Windows Server 2019
