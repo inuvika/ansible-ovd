@@ -33,7 +33,6 @@
     settings:
       general.system_in_maintenance: yes
     purge_all_sessions: true
-    api: "{{ ovd_sm_admin_api }}"
     user: "{{ ovd_sm_admin_login }}"
     password: "{{ ovd_sm_admin_password }}"
   when: sm_install_result is failed and ovd_sm_force_update|bool

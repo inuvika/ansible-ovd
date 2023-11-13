@@ -18,57 +18,11 @@
  * limitations under the License.
  */
 
-abstract class AdminApi {
-	protected $host;
-	protected $login;
-	protected $password;
-
+class AdminAPI {
 	public function __construct($host_, $login_, $password_) {
 		$this->host = $host_;
 		$this->login = $login_;
 		$this->password = $password_;
-	}
-
-	abstract public function __call($func_, $args_);
-
-	public static function factory($mode_, $host_, $login_, $password_) {
-		$class = 'AdminAPI_'.ucfirst($mode_);
-		return new $class($host_, $login_, $password_);
-	}
-}
-
-
-class AdminAPI_Soap extends AdminApi {
-	public function __construct($host_, $login_, $password_) {
-		parent::__construct($host_, $login_, $password_);
-
-		$this->service = new SoapClient(
-			'https://' . $this->host . '/ovd/service/admin/wsdl',
-			[
-				'login' => $this->login,
-				'password' => $this->password,
-				'location' => 'https://' . $this->host . '/ovd/service/admin',
-				'stream_context' => stream_context_create([
-					'ssl' => [
-						'verify_peer' => false,
-						'verify_peer_name' => false,
-						'allow_self_signed' => true,
-					],
-				]),
-			]
-		);
-	}
-
-	public function __call($func_, $args_) {
-		return $this->service->__call($func_, $args_);
-	}
-}
-
-
-class AdminAPI_Rest extends AdminApi {
-	public function __construct($host_, $login_, $password_) {
-		parent::__construct($host_, $login_, $password_);
-
 		$this->base_url = 'https://'.$this->host.'/ovd/service/admin/';
 		$this->cookies = [];
 	}
@@ -394,11 +348,6 @@ abstract class Ansible {
 
 class AnsibleSm extends Ansible {
 	protected $parameters = [
-		"api" => [
-			'type' => 'string',
-			'required' => true,
-			'choices' => ["rest", "soap"],
-		],
 		"host" => [
 			'type' => 'string',
 			'required' => false,
@@ -617,8 +566,7 @@ class AnsibleSm extends Ansible {
 
 
 	protected function process() {
-		$this->service = AdminApi::factory(
-			$this->options["api"],
+		$this->service = new AdminApi(
 			$this->options["host"],
 			$this->options["user"],
 			$this->options["password"]

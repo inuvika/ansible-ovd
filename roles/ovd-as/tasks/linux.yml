@@ -28,6 +28,7 @@
       - inuvika-ovd-desktop-gtk-theme
       - inuvika-ovd-externalapps-client
       - inuvika-ovd-logout-dialog
+      - inuvika-ovd-message
       - inuvika-ovd-regular-union-fs
       - inuvika-ovd-shells
       - inuvika-ovd-vnc-server
@@ -39,9 +40,6 @@
       - xrdp-rdpdr
       - xrdp-seamrdp
       - xrdp-sound
-
-- when: ovd_version is version('3.0', '>=')
-  set_fact: ovd_as_packages="{{ovd_as_packages}} + [ 'inuvika-ovd-message' ]"
 
 - when: ovd_version is version('3.1.90', '<')
   set_fact: ovd_as_packages="{{ovd_as_packages}} + [ 'xrdp-scim' ]"
@@ -131,7 +129,6 @@
       - Restart Slaveserver
 
   - name: Enable and start the XRDP services
-    when: ovd_version is version('3.0.99', '>=')
     service:
       name: "{{ item }}"
       state: started
@@ -190,7 +187,6 @@
 
 - name: Fix "pulseaudio 8.0 compatibility with User Process Isolation"
   when:
-    - ovd_version is version('3.0', '>=')
     - ansible_distribution_release == "xenial"
     - ovd_best_practices is defined and ovd_best_practices|bool==true
   block:

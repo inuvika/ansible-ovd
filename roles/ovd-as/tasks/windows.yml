@@ -116,24 +116,10 @@
     data: "1"
     type: dword
 
-- name: Install Microsoft Redistributable
-  when:
-    - ovd_as_setup_type == "msi"
-    - ovd_version is version('3.0', '>=')
-  block:
-    - name: Install Microsoft Visual C++ 2008 SP1 Redistributable Package
-      when: ovd_version is version('3.0.99', '<')
-      win_chocolatey:
-        name: vcredist2008
-
-    - name: Install Microsoft Visual C++ Redistributable for Visual Studio 2017
-      win_chocolatey:
-        name: vcredist2017
-
-- name: Set the ApplicationServer filename for OVD version 2.8.2
-  when: ovd_version is version('2.8.2', '==')
-  set_fact:
-    oas_setup_base: Inuvika-OVD-2.8.2.1-ApplicationServer
+- name: Install Microsoft Visual C++ Redistributable for Visual Studio 2017
+  when: ovd_as_setup_type == "msi"
+  win_chocolatey:
+    name: vcredist2017
 
 - name: Set the ApplicationServer filename
   when: oas_setup_base is not defined
@@ -267,11 +253,6 @@
 - name: Install Inuvika WebDAV driver
   when: ovd_install_webdav is defined and ovd_install_webdav|bool==true
   block:
-    - name: "Install Inuvika WebDAV driver: Store WebDAV driver filename into variable for OVD version 2.8.2"
-      when: ovd_version is version('2.8.2', '==')
-      set_fact:
-        ovd_webdav_setup_base: Inuvika-OVD-2.8.2.1-webdavfs
-
     - name: "Install Inuvika WebDAV driver: Store WebDAV driver filename into variable"
       when: ovd_webdav_setup_base is not defined
       set_fact:

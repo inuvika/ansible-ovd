@@ -33,8 +33,7 @@
 - when: ansible_os_family == 'RedHat'
   set_fact: ovd_sm_packages="{{ovd_sm_packages}} + [ 'php-imagick' ]"
 
-- when: ovd_version is version('3.0', '>=')
-  set_fact: ovd_sm_packages="{{ovd_sm_packages}} + [ 'inuvika-ovd-user-configuration', 'inuvika-ovd-l10n' ]"
+- set_fact: ovd_sm_packages="{{ovd_sm_packages}} + [ 'inuvika-ovd-user-configuration', 'inuvika-ovd-l10n' ]"
 
 - include_tasks: debian.yml
   tags: [ovd, ovd-sm]
