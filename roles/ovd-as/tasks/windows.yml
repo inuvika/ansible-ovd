@@ -249,36 +249,3 @@
         type: deny
         rights: ExecuteFile
         state: present
-
-- name: Install Inuvika WebDAV driver
-  when: ovd_install_webdav is defined and ovd_install_webdav|bool==true
-  block:
-    - name: "Install Inuvika WebDAV driver: Store WebDAV driver filename into variable"
-      when: ovd_webdav_setup_base is not defined
-      set_fact:
-        ovd_webdav_setup_base: Inuvika-OVD-{{ ovd_version }}-webdavfs
-
-
-    - name: "Install Inuvika WebDAV driver : Download installer"
-      win_get_url:
-        url: "{{ ovd_repo }}/{{ ovd_webdav_setup_base }}.exe"
-        dest: '%TEMP%\{{ ovd_webdav_setup_base }}.exe'
-        force: no
-
-    - name: "Install Inuvika WebDAV driver : Extract the certificate from the Inuvika setup"
-      win_shell: "[System.IO.File]::WriteAllBytes('{{ ovd_webdav_setup_base }}.cer', (Get-AuthenticodeSignature '{{ ovd_webdav_setup_base }}.exe').SignerCertificate.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert));"
-      args:
-        chdir: "{{ ansible_env.TEMP }}"
-        creates: "{{ ansible_env.TEMP }}\\{{ ovd_webdav_setup_base }}.cer"
-
-    - name: "Install Inuvika WebDAV driver : Install the Inuvika code-sign certificate as a trusted publisher"
-      win_certificate_store:
-        path: "{{ ansible_env.TEMP }}\\{{ ovd_webdav_setup_base }}.cer"
-        store_name: TrustedPublisher
-
-    - name: "Install Inuvika WebDAV driver : Install OVD WebDAV driver (exe)"
-      win_package:
-        path: "{{ ansible_env.TEMP }}\\{{ ovd_webdav_setup_base }}.exe"
-        arguments: "/S"
-        product_id: "Inuvika OVD WebDAV driver"
-        state: present
