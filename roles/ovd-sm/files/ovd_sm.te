@@ -3,9 +3,12 @@ module ovd_sm 1.0;
 require {
         type useradd_t, httpd_sys_rw_content_t;
         type httpd_t, fonts_cache_t;
+        type var_run_t;
         class file write;
         class dir setattr;
+        class sock_file write;
 
 }
 allow useradd_t httpd_sys_rw_content_t: file write;
 allow httpd_t fonts_cache_t: dir setattr;
+allow httpd_t var_run_t:sock_file write;
