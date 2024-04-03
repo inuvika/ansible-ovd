@@ -54,6 +54,13 @@
     state: present
   register: install_nfs
 
+- name: Install WebDAV Client
+  when: ovd_install_webdav is defined and ovd_install_webdav|bool==true
+  win_feature:
+    name: WebDAV-Redirector
+    state: present
+  register: install_webdav
+
 - name: Install Remote-Assistance
   when: ovd_install_msra is defined and ovd_install_msra|bool==true
   win_feature:
@@ -74,7 +81,7 @@
 
 - name: Reboot if requested by win_feature
   win_reboot:
-  when: install_rds.reboot_required|default(False) or install_nfs.reboot_required|default(False) or install_msra.reboot_required|default(False)
+  when: install_rds.reboot_required|default(False) or install_nfs.reboot_required|default(False) or install_msra.reboot_required|default(False) or install_webdav.reboot_required|default(False)
 
 - name: Configure RDS
   win_shell: |
