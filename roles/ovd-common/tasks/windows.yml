@@ -17,5 +17,5 @@
 - name: Check the OS version
   assert:
     that:
-      - ansible_os_name|regex_search("Server (2022|2019|2016|2012 R2)")
+      - ansible_os_name|regex_search("(Server 2022|Server 2019|Server 2016|Server 2012 R2|Windows 10|Windows 11)")
     msg: "{{ ansible_os_name }} is not supported by OVD"
