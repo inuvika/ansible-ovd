@@ -148,3 +148,8 @@
         name: ovd-slaveserver
         state: started
         enabled: yes
+
+- name: Configure Security headers
+  ansible.builtin.include_role:
+    name: ovd-common
+    tasks_from: apache_security
