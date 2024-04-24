@@ -241,6 +241,12 @@
       win_reboot:
       when: install_webdav.reboot_required|default(False)
 
+    - name: 'Install WebDAV Client : Change service start method'
+      win_service:
+        name: WebClient
+        start_mode: auto
+        state: started
+
 - name: Apply "Windows Security 2019" KB
   vars:
     winpath: '{{ ansible_env.SystemRoot | default("C:\\Windows") }}\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy\SecHealthUI.exe'
