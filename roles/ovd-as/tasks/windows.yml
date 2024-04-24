@@ -230,14 +230,16 @@
 
 - name: Install WebDAV Client
   when: ovd_install_webdav is defined and ovd_install_webdav|bool==true
-  win_feature:
-    name: WebDAV-Redirector
-    state: present
-  register: install_webdav
+  block:
+    - name: 'Install WebDAV Client : Deploy the feature'
+      win_feature:
+        name: WebDAV-Redirector
+        state: present
+      register: install_webdav
 
-- name: Reboot if requested by win_feature
-  win_reboot:
-  when: install_webdav.reboot_required|default(False)
+    - name: 'Install WebDAV Client : Reboot if requested by win_feature'
+      win_reboot:
+      when: install_webdav.reboot_required|default(False)
 
 - name: Apply "Windows Security 2019" KB
   vars:
