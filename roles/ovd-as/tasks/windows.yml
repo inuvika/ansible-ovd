@@ -60,6 +60,7 @@
     name: Remote-Assistance
     state: present
   register: install_msra
+  ignore_errors: ovd_as_is_workstation
 
 - name: Install RDS
   win_feature:
@@ -69,6 +70,7 @@
     include_sub_features: yes
     include_management_tools: yes
   register: install_rds
+  ignore_errors: ovd_as_is_workstation
 
 - name: Reboot if requested by win_feature
   win_reboot:
