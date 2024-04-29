@@ -228,6 +228,25 @@
         state: present
         propagation: None
 
+- name: Install WebDAV Client
+  when: ovd_install_webdav is defined and ovd_install_webdav|bool==true
+  block:
+    - name: 'Install WebDAV Client : Deploy the feature'
+      win_feature:
+        name: WebDAV-Redirector
+        state: present
+      register: install_webdav
+
+    - name: 'Install WebDAV Client : Reboot if requested by win_feature'
+      win_reboot:
+      when: install_webdav.reboot_required|default(False)
+
+    - name: 'Install WebDAV Client : Change service start method'
+      win_service:
+        name: WebClient
+        start_mode: auto
+        state: started
+
 - name: Apply "Windows Security 2019" KB
   vars:
     winpath: '{{ ansible_env.SystemRoot | default("C:\\Windows") }}\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy\SecHealthUI.exe'
