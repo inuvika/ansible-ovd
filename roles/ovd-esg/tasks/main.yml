@@ -68,3 +68,7 @@
     - { option: disable_sslv2, value: ovd_esg_disable_sslv2 }
     - { option: force_buffering, value: ovd_esg_force_buffering }
     - { option: token_expiration, value: ovd_esg_token_expiration }
+    - { option: rd_gateway, value: ovd_esg_rd_gateway }
+    - { option: rdp_over_tls, value: ovd_esg_rdp_over_tls }
+    - { option: minimal_protocol, value: ovd_esg_minimal_protocol }
+    - { option: cipher_list, value: ovd_esg_cipher_list }

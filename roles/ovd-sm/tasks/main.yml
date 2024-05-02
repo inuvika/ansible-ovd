@@ -68,3 +68,8 @@
   tags: [ovd, ovd-sm]
   notify:
     - Configure Session Manager Database
+
+- name: Configure Security headers
+  ansible.builtin.include_role:
+    name: ovd-common
+    tasks_from: apache_security
