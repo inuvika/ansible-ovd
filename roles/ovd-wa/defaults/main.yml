@@ -23,3 +23,5 @@ apache2_MinSpareServers: 5
 apache2_MaxSpareServers: 10
 apache2_MaxRequestWorkers: 1024
 apache2_MaxConnectionsPerChild: 0
+
+ovd_slaveserver_log_levels: error warn info
