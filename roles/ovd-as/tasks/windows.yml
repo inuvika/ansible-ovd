@@ -118,6 +118,13 @@
     data: "1"
     type: dword
 
+- name: Ensure Print Spooler is enabled and started
+  win_service:
+    name: Spooler
+    state: started
+    start_mode: auto
+  tags: [ovd, ovd-as]
+
 - name: Install Microsoft Visual C++ Redistributable for Visual Studio 2017
   when: ovd_as_setup_type == "msi"
   win_chocolatey:
