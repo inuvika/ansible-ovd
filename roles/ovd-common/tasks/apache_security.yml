@@ -24,7 +24,7 @@
   failed_when: false
   tags: [ovd]
 
-- name: Configure Security headers
+- name: Configure Apache Security headers
   when: ovd_add_security_headers
   tags: [ovd]
   lineinfile:
@@ -39,3 +39,25 @@
     - { option: X-Content-Type-Options, value: nosniff }
     - { option: X-Frame-Options, value: SAMEORIGIN }
     - { option: Content-Security-Policy, value: "default-src 'self' https: http: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'" }
+
+- name: Configure Apache ServerTokens
+  when: ovd_add_security_headers
+  tags: [ovd]
+  lineinfile:
+    path: "{{ apache_security_file }}"
+    regexp: '^ServerTokens'
+    line: ServerTokens Prod
+    create: true
+  notify:
+    - Restart Apache
+
+- name: Configure Apache ServerSignature
+  when: ovd_add_security_headers
+  tags: [ovd]
+  lineinfile:
+    path: "{{ apache_security_file }}"
+    regexp: '^ServerSignature'
+    line: ServerSignature Off
+    create: true
+  notify:
+    - Restart Apache
