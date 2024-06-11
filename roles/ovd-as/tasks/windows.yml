@@ -125,6 +125,12 @@
     start_mode: auto
   tags: [ovd, ovd-as]
 
+- name: Create the OVDUsers group
+  win_group:
+    name: OVDUsers
+    state: present
+  tags: [ovd, ovd-as]
+
 - name: Install Microsoft Visual C++ Redistributable for Visual Studio 2017
   when: ovd_as_setup_type == "msi"
   win_chocolatey:
