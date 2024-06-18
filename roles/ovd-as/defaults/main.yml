@@ -32,4 +32,4 @@ ovd_as_setup_type: exe # possible values: exe, msi
 
 ovd_as_verify_nls_utf8: true
 
-ovd_as_is_workstation: "{{ ansible_os_name|regex_search('(Windows 10|Windows 11)') }}"
+ovd_as_is_workstation: "{{ ansible_os_name|regex_search('(Windows 10|Windows 11)') is not none }}"
