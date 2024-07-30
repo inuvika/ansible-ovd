@@ -96,7 +96,7 @@
 
 - name: Ensure Guacamole is started
   service:
-    name: "{{ 'guacd' if ovd_version is version('3.0.99', '<') else 'guacamole' }}"
+    name: guacamole
     state: started
     enabled: yes
   tags: [ovd, ovd-wa]
@@ -148,3 +148,8 @@
         name: ovd-slaveserver
         state: started
         enabled: yes
+
+- name: Configure Security headers
+  ansible.builtin.include_role:
+    name: ovd-common
+    tasks_from: apache_security

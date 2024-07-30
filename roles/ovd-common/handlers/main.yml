@@ -1,6 +1,6 @@
-# Copyright (C) 2018 Inuvika Inc.
+# Copyright (C) 2024 Inuvika Inc.
 # https://www.inuvika.com
-# Author David PHAM-VAN <d.phamvan@inuvika.com> 2018
+# Author David PHAM-VAN <d.phamvan@inuvika.com> 2024
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
-# The '{VERSION_CODE}' value is a constant and is not intended to be substituted
-ovd_version_code: '{VERSION_CODE}'
-ovd_repo: http://archive.inuvika.com/ovd/{{ ovd_version_code }}
-
-ovd_www_config: "apache-mod"
-# Allowed values: apache-mod, apache-fpm
-
-ovd_add_security_headers: true
+- name: Restart Apache
+  service:
+    name: '{{ apache_service_name }}'
+    state: restarted
+  tags: [ovd]

@@ -31,3 +31,7 @@ ovd_esg_root_redirection: /ovd
 # ovd_esg_disable_sslv2: false
 # ovd_esg_force_buffering: /ovd/client/start /ovd/client/start.php
 # ovd_esg_token_expiration: 30
+# ovd_esg_rd_gateway: true
+# ovd_esg_rdp_over_tls: true
+ovd_esg_minimal_protocol: tlsv1.2
+ovd_esg_cipher_list: ECDHE+AES:@STRENGTH:+AES256

@@ -14,11 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
-# The '{VERSION_CODE}' value is a constant and is not intended to be substituted
-ovd_version_code: '{VERSION_CODE}'
-ovd_repo: http://archive.inuvika.com/ovd/{{ ovd_version_code }}
-
-ovd_www_config: "apache-mod"
-# Allowed values: apache-mod, apache-fpm
-
-ovd_add_security_headers: true
+apache_service_name: apache2
+apache_security_file: /etc/apache2/conf-available/security.conf

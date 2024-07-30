@@ -42,9 +42,9 @@
   get_url:
     url: "{{ ovd_repo }}/keyring"
     dest: /etc/apt/trusted.gpg.d/inuvika.asc
-    mode: '0644'
+    mode: "0644"
     force: true
-    sha256sum: ff8fc09d8425c38c3c78b67213761db98c536adea2bcca44350b34a7a69179de
+    checksum: sha256:ff8fc09d8425c38c3c78b67213761db98c536adea2bcca44350b34a7a69179de
 
 - name: Install OVD Keyring
   when: ansible_distribution_release in ('xenial', 'bionic')

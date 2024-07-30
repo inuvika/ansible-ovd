@@ -37,7 +37,6 @@
         rhsm_repository:
           name:
             - codeready-builder-for-rhel-8-x86_64-rpms # For EPEL
-            - openstack-15-tools-for-rhel-8-x86_64-rpms # For ovd-esg: python3-crypto
 
       - name: Enable required RHEL 7 repository (Optional Repository Channel) # For EPEL
         when: ansible_distribution_major_version == '7'

@@ -24,10 +24,12 @@ ovd_install_msra: true
 # ovd_as_linux_skel_directory: /dev/null
 # ovd_as_linux_fuse_group: fuse
 # ovd_as_override_password_method: unix
-# ovd_as_override_password_repository: 
+# ovd_as_override_password_repository:
 # ovd_as_disable_autostart: imsettings-start
 # ovd_as_disconnection_delay: 4
 
 ovd_as_setup_type: exe # possible values: exe, msi
 
 ovd_as_verify_nls_utf8: true
+
+ovd_as_is_workstation: "{{ ansible_os_name|regex_search('(Windows 10|Windows 11)') is not none }}"
