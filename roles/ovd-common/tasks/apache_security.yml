@@ -39,6 +39,7 @@
     - { option: X-Content-Type-Options, value: nosniff }
     - { option: X-Frame-Options, value: SAMEORIGIN }
     - { option: Content-Security-Policy, value: "default-src 'self' https: http: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'" }
+    - { option: X-Robots-Tag, value: noindex }
 
 - name: Configure Apache Security Cookies
   when: ovd_add_security_headers
