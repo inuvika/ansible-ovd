@@ -29,8 +29,8 @@
   tags: [ovd]
   lineinfile:
     path: "{{ apache_security_file }}"
-    regexp: '^Header set {{ item.option }}:'
-    line: "Header set {{ item.option }}: \"{{ item.value }}\""
+    regexp: '^Header set {{ item.option }}'
+    line: "Header set {{ item.option }} \"{{ item.value }}\""
     create: true
   notify:
     - Restart Apache
@@ -39,6 +39,18 @@
     - { option: X-Content-Type-Options, value: nosniff }
     - { option: X-Frame-Options, value: SAMEORIGIN }
     - { option: Content-Security-Policy, value: "default-src 'self' https: http: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'" }
+    - { option: X-Robots-Tag, value: noindex }
+
+- name: Configure Apache Security Cookies
+  when: ovd_add_security_headers
+  tags: [ovd]
+  lineinfile:
+    path: "{{ apache_security_file }}"
+    regexp: '^Header edit Set-Cookie'
+    line: "Header edit Set-Cookie ^(.*)$ $1;Secure;SameSite=None;Partitioned;HttpOnly"
+    create: true
+  notify:
+    - Restart Apache
 
 - name: Configure Apache ServerTokens
   when: ovd_add_security_headers
