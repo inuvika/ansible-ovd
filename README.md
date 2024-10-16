@@ -18,11 +18,11 @@ host or a set of hosts for production use. The hosts in question can be physical
 
 The roles support the following servers:
 
-* CentOS 7.x 64 bits  (available for OVD <= 3.3)
-* Red Hat Enterprise Linux 7.x 64 bits  (available for OVD <= 3.3)
-* Ubuntu 22.04 LTS server (Jammy Jellyfish) 64 bits  (available for OVD >= 3.2.1)
-* Ubuntu 18.04 LTS server (Bionic Beaver) 64 bits  (available for OVD <= 3.3)
-* Ubuntu 16.04 LTS server (Xenial Xerus) 64 bits  (available for OVD <= 3.1)
+* Red Hat Enterprise Linux 7.x 64 bits (OVD <= 3.3)
+* Red Hat Enterprise Linux 8.x 64 bits (OVD >= 3.2.1)
+* CentOS 7.x 64 bits (OVD <= 3.3)
+* Ubuntu 22.04 LTS server (Jammy Jellyfish) 64 bits (OVD >= 3.2.1)
+* Ubuntu 18.04 LTS server (Bionic Beaver) 64 bits (OVD <= 3.3)
 * Windows Server 2022
 * Windows Server 2019
 * Windows Server 2016
@@ -106,28 +106,41 @@ You may also [contact Inuvika](https://www.inuvika.com/contact-us/) to request t
 
 ## Install and Manage your Inuvika OVD Enterprise farm
 
-1. Copy or rename the example folder to a custom name and cd to this folder
+ 1. Create a copy of the example folder and rename to a custom name
 
-2. Edit the file inventory.cfg
+ 1. Navigate to this folder
 
-   * Update the credentials:
-      if you have an ssh key set up for your root user, use `ansible_user=root` and `ansible_become=no`.
+ 1. Configure ssh key authentication
+     1. Generate ssh keys with command `ssh-keygen`
 
-      To generate ssh keys, use the command `ssh-keygen` and copy the contents of the generated `.pub` file
-      to the Linux servers in `~root/.ssh/authorized_keys` and `sudo chmod 600 ~root/.ssh/authorized_keys`.
+     1. Copy the contents of the generated `.pub` file to Linux  servers in `~root/.ssh/authorized_keys` and `sudo chmod 600 ~root/.ssh/authorized_keys`.
 
-   * In the *inventory.cfg* file, replace `{VERSION_CODE}` with the *version code* as described
-     in the [Version code section](#version-code "Version Code").
+ 1. Update inventory variables in the inventory.cfg file
+      * Replace `{VERSION_CODE}` with the *version code* as described
+        in the [Version code section](#version-code "Version Code").
 
-   * In the section `[all]` add all your machines with:
+      * In *Linux servers authentication* section:
+          * update the value for `ansible_user`.
 
-      ```ini
-      [all]
-      machine_name ansible_host=ip_address
-      ```
+          * if using *ssh key authentication*, comment out
+            `ansible_password` line by prefixing it with `#`.
 
-   * In the other sections, add the machine names to the features you want to install.
-   * In the section `[woas:vars]` you can specify the specific credentials for the Windows Servers.
+          * if `ansible_user` is set to *root*, set `ansible_become` to `no`.
+
+          * if `ansible_user` is *not root*, update the values for:
+              * `ansible_become_user` to specify the appropriate user.
+
+              * `ansible_become_pass` to specify the password for privilege escalation.
+
+      * In the section `[all]` add all your machines with:
+        ```ini
+        [all]
+        machine_name ansible_host=ip_address
+        ```
+
+      * In the other sections, add the machine names to the features you want to install.
+
+      * In the section `[woas:vars]` you can specify the specific credentials for the Windows Servers.
 
 3. Run this powershell script to enable winrm on the Windows servers: [ConfigureRemotingForAnsible.ps1](https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
 
