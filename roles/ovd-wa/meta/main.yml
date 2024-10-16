@@ -17,6 +17,9 @@
 dependencies:
   - { role: ovd-common }
 
+collections:
+  - community.general
+
 galaxy_info:
   author: David PHAM-VAN
   description: Inuvika OVD Web Access
