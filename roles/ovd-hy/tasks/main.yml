@@ -1,0 +1,55 @@
+# Copyright (C) 2024 Inuvika Inc.
+# https://www.inuvika.com
+# Author David Lechevalier <d.lechevalier@inuvika.com> 2024
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+---
+- name: Deploy Provisioning Server
+  when: ovd_version is version('3.4', '>=')
+  block:
+    - include_tasks: debian.yml
+      when: ansible_os_family == 'Debian'
+      tags: [ovd, ovd-hy]
+
+    - include_tasks: redhat.yml
+      when: ansible_os_family == 'RedHat'
+      tags: [ovd, ovd-hy]
+
+    - name: Update Slaveserver Roles
+      ovd_slaveserver_role:
+        dest: /etc/ovd/slaveserver/slaveserver.conf
+        name: Hypervisor
+        state: present
+      notify:
+        - Restart Slaveserver
+      tags: [ovd, ovd-hy]
+
+    - name: Configure OVD Provisioning Server
+      ini_file:
+        path: /etc/ovd/slaveserver/slaveserver.conf
+        section: Hypervisor
+        option: '{{ item.option }}'
+        value: '{{ lookup("vars", item.value, default="") }}'
+        state: '{{ "absent" if lookup("vars", item.value, default="") == "" else "present" }}'
+        mode: 0644
+      notify:
+        - Restart Slaveserver
+      loop:
+        - { option: thread_count, value: ovd_hy_thread_count }
+
+    - name: Ensure OVD Slaveserver is started
+      service:
+        name: ovd-slaveserver
+        state: started
+        enabled: yes
+      tags: [ovd, ovd-hy]
