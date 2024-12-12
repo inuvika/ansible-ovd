@@ -22,3 +22,4 @@ ovd_www_config: "apache-mod"
 # Allowed values: apache-mod, apache-fpm
 
 ovd_add_security_headers: true
+ovd_debug: false

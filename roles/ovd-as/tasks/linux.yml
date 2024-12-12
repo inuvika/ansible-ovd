@@ -52,6 +52,7 @@
       state: latest
 
   - name: Install OVD Linux Application Server debug package
+    when: ovd_debug
     apt:
       name: inuvika-ovd-externalapps-client-dbg
       state: latest
